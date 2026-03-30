@@ -1,0 +1,26 @@
+databases:
+  - name: logoped-ia-db
+    databaseName: logoped_ia
+    user: logoped_ia
+    plan: free
+
+services:
+  - type: web
+    name: logoped-ia-examen
+    env: python
+    plan: free
+    rootDir: examen-nivel
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.2
+      - key: DATABASE_URL
+        fromDatabase:
+          name: logoped-ia-db
+          property: connectionString
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: EXAM_MODE
+        value: aleatorio
