@@ -184,6 +184,30 @@
     }
     .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(22,163,74,0.38); }
     .btn-primary:active { transform: translateY(0); }
+    .rgpd-check {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--primary-bg);
+      border: 1.5px solid var(--border-focus);
+      border-radius: 0.75rem;
+    }
+    .rgpd-label {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      cursor: pointer;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .rgpd-label input[type="checkbox"] {
+      margin-top: 0.15rem;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
     .disclaimer { font-size: 0.73rem; color: var(--text-muted); text-align: center; margin-top: 0.8rem; }
 
     /* ════════════════════════════════════════
@@ -628,8 +652,15 @@
         <option>Otra</option>
       </select>
     </div>
+    <div class="rgpd-check">
+      <label class="rgpd-label">
+        <input type="checkbox" id="check-rgpd"/>
+        <span>Acepto que mis datos (nombre, profesión y resultados) se usen para mejorar los contenidos de Logoped-IA. El email es opcional y nunca se comparte con terceros. <a href="https://t.me/logopedia_ia" target="_blank" style="color:var(--primary)">Más info</a></span>
+      </label>
+      <p id="rgpd-error" style="color:var(--danger);font-size:0.82rem;display:none;margin-top:0.3rem">Necesito tu consentimiento para continuar.</p>
+    </div>
     <button class="btn-primary" onclick="iniciarExamen()">🚀 Empezar la prueba</button>
-    <p class="disclaimer">Tus datos se usan solo para las estadísticas del canal. Sin spam, nunca.</p>
+    <p class="disclaimer">Tus datos no se comparten con terceros. Sin spam, nunca.</p>
   </div>
 </section>
 
@@ -786,6 +817,13 @@ async function iniciarExamen() {
     document.getElementById("input-nombre").style.borderColor = "#DC2626";
     return;
   }
+  const rgpd = document.getElementById("check-rgpd").checked;
+  if (!rgpd) {
+    document.getElementById("rgpd-error").style.display = "block";
+    document.getElementById("check-rgpd").closest(".rgpd-check").style.borderColor = "#DC2626";
+    return;
+  }
+  document.getElementById("rgpd-error").style.display = "none";
   nombreUsuario = nombre;
   document.getElementById("input-nombre").style.borderColor = "";
   mostrarPantalla("loading");
