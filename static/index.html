@@ -1155,6 +1155,20 @@ function mostrarResultados(data) {
   if (data.porcentaje >= 60) {
     setTimeout(() => lanzarConfeti(data.porcentaje), 800);
   }
+
+  // Notificar al frame padre (Academia Logoped-IA)
+  if (window.parent !== window) {
+    const nivelKey = data.porcentaje >= 80 ? 'experto'
+                   : data.porcentaje >= 60 ? 'avanzado'
+                   : data.porcentaje >= 40 ? 'intermedio'
+                   : 'basico';
+    window.parent.postMessage({
+      tipo: 'resultado_examen',
+      nivel: nivelKey,
+      puntos: data.puntuacion,
+      porcentaje: data.porcentaje
+    }, '*');
+  }
 }
 
 // ═══════════════════════════════════════════════════
